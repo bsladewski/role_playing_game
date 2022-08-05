@@ -1,0 +1,23 @@
+[Steve]
+Hello, my name is Steve!
+
+[Player]
+Hello, Steve! My name is {{player.name}}! How are you doing?
+
+[Steve]
+(sad) Pretty <color=blue>sad</color>, actually...
+
+[Player]
+(angry) That makes me <color=red>angry</color>!
+
+[Steve]
+(excited) Yay, emotions!
+
+[Player]
+(excited) Yay!
+
+[Steve]
+(scared) Emotions have made me scared!
+
+[Player]
+Well... Bye, Steve.

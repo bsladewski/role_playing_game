@@ -1,10 +1,9 @@
 using System;
-using UnityEngine;
 
 /// <summary>
 /// Represents the player character.
 /// </summary>
-public class Player : MonoBehaviour
+public class Player : Actor
 {
     /// <summary>
     /// Fired whenever a player object spawns.
@@ -12,7 +11,7 @@ public class Player : MonoBehaviour
     public static event EventHandler<Player> OnAnyPlayerSpawned;
 
     /// <summary>
-    /// Fired whenever a player is destroyed.
+    /// Fired whenever a player object is destroyed.
     /// </summary>
     public static event EventHandler<Player> OnAnyPlayerDestroyed;
 
@@ -24,11 +23,5 @@ public class Player : MonoBehaviour
     private void OnDestroy()
     {
         OnAnyPlayerDestroyed?.Invoke(gameObject, this);
-    }
-
-    private void Update()
-    {
-        Debug.Log(transform.forward);
-        Debug.DrawLine(transform.position, transform.forward * 2f, Color.red, 1f);
     }
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// Keeps the overhead camera position over the player.
+/// Keeps the overhead camera positioned over the player.
 /// </summary>
 public class OverheadCameraController : MonoBehaviour
 {
@@ -9,6 +9,7 @@ public class OverheadCameraController : MonoBehaviour
 
     private void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
         Player.OnAnyPlayerSpawned += Player_OnAnyPlayerSpawned;
         Player.OnAnyPlayerDestroyed += Player_OnAnyPlayerDestroyed;
     }
