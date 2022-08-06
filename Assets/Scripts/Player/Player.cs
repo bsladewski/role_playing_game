@@ -18,12 +18,16 @@ public class Player : Actor
     public static event EventHandler<Player> OnAnyPlayerDestroyed;
 
     [SerializeField]
+    private Animator animator;
+
+    [SerializeField]
     private LookAtPosition lookAtPosition;
 
     private void Start()
     {
         OnAnyPlayerSpawned?.Invoke(gameObject, this);
         DialogueSystem.Instance.OnDialogueStarted += DialogueSystem_OnDialogueStarted;
+        DialogueSystem.Instance.OnDialogueEnded += DialogueSystem_OnDialogueEnded;
         DialogueSystem.Instance.OnDialogueExchange += DialogueSystem_OnDialogueExchange;
     }
 
@@ -48,8 +52,27 @@ public class Player : Actor
         }
     }
 
+    private void DialogueSystem_OnDialogueEnded(object sender, List<Actor> actors)
+    {
+        if (actors.Contains(this))
+        {
+            animator.SetBool("Talking", false);
+        }
+    }
+
     private void DialogueSystem_OnDialogueExchange(object sender, DialogueExchange exchange)
     {
+        if (exchange.actorID == GetActorID())
+        {
+            animator.SetBool("Talking", true);
+            animator.SetInteger("Emotion", ((int)exchange.emotion));
+        }
+        else
+        {
+            animator.SetBool("Talking", false);
+            animator.SetInteger("Emotion", 0);
+        }
+
         Actor actor = DialogueSystem.Instance.GetActor(exchange.actorID);
         if (actor != null && actor is NPC)
         {

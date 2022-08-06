@@ -836,6 +836,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30e1be6b2c6524d48a7379261ec839d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 669185728}
   actorID: Player
   actorDisplayName: Player
   actorDisplayNameColor: {r: 0.9245283, g: 0.7864907, b: 0.10902455, a: 1}
@@ -1816,6 +1817,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f09debcf9faef954083c1364b0f4b658, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 2104417265}
   actorID: Steve
   actorDisplayName: Steve
   actorDisplayNameColor: {r: 0.52156866, g: 0.64705884, b: 0.40784317, a: 1}
@@ -2364,6 +2366,12 @@ PrefabInstance:
 --- !u!4 &2104417264 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400020, guid: b5f71c859f9f9bf41badda8a4650082c,
+    type: 3}
+  m_PrefabInstance: {fileID: 2104417263}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &2104417265 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 9500000, guid: b5f71c859f9f9bf41badda8a4650082c,
     type: 3}
   m_PrefabInstance: {fileID: 2104417263}
   m_PrefabAsset: {fileID: 0}
