@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -6,6 +7,9 @@ using UnityEngine;
 /// </summary>
 public class ActorBusy : MonoBehaviour
 {
+    [SerializeField]
+    private Actor actor;
+
     private bool isBusy;
 
     /// <summary>
@@ -15,5 +19,27 @@ public class ActorBusy : MonoBehaviour
     public bool GetIsBusy()
     {
         return isBusy;
+    }
+
+    private void Start()
+    {
+        DialogueSystem.Instance.OnDialogueStarted += DialogueSystem_OnDialogueStarted;
+        DialogueSystem.Instance.OnDialogueEnded += DialogueSystem_OnDialogueEnded;
+    }
+
+    private void DialogueSystem_OnDialogueStarted(object sender, List<Actor> actors)
+    {
+        if (actors.Contains(actor))
+        {
+            isBusy = true;
+        }
+    }
+
+    private void DialogueSystem_OnDialogueEnded(object sender, List<Actor> actors)
+    {
+        if (actors.Contains(actor))
+        {
+            isBusy = false;
+        }
     }
 }

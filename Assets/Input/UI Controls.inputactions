@@ -1,0 +1,56 @@
+{
+    "name": "UI Controls",
+    "maps": [
+        {
+            "name": "UI",
+            "id": "7a96651f-e182-48ab-8f8b-82dabf172388",
+            "actions": [
+                {
+                    "name": "Select",
+                    "type": "Button",
+                    "id": "317ae158-e476-46bc-a27a-3055b71e5f7b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "afb2ff85-aad0-48a0-98ad-49edfc1d7aa4",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "de3e3ca4-e676-4811-a245-caf0aa44b2fb",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2229e090-28e0-4edd-8039-d02cc1ec8f54",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

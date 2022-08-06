@@ -9,7 +9,6 @@ public class InteractionUI : MonoBehaviour
     /// <summary>
     /// An instance of this singleton class.
     /// </summary>
-    /// <value></value>
     public static InteractionUI Instance { get; private set; }
 
     [SerializeField]
@@ -25,7 +24,8 @@ public class InteractionUI : MonoBehaviour
     {
         if (Instance != null)
         {
-            Debug.LogError("Singleton Interaction UI alread exists!");
+            Debug.LogError("Singleton InteractionUI alread exists!");
+            Destroy(gameObject);
             return;
         }
         Instance = this;

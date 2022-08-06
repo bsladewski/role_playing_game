@@ -10,7 +10,7 @@ public class Interaction : MonoBehaviour
     /// <summary>
     /// Fired whenever this interaction is performed.
     /// </summary>
-    public event EventHandler OnInteractionPerformed;
+    public event EventHandler<Player> OnInteractionPerformed;
 
     [SerializeField]
     private string interactionLabel = "Interact";
@@ -58,9 +58,9 @@ public class Interaction : MonoBehaviour
     /// <summary>
     /// Triggers the event to perform this interaction.
     /// </summary>
-    public void PerformInteraction()
+    public void PerformInteraction(Player player)
     {
-        OnInteractionPerformed?.Invoke(gameObject, EventArgs.Empty);
+        OnInteractionPerformed?.Invoke(gameObject, player);
         interactionCount++;
         cooldownActive = true;
         StartCoroutine(Delay(cooldown, () => cooldownActive = false));

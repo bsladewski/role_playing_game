@@ -15,6 +15,9 @@ public class PlayerInteraction : MonoBehaviour
     public static event EventHandler<Interaction> OnAnySelectedInteractionChanged;
 
     [SerializeField]
+    private Player player;
+
+    [SerializeField]
     private PlayerInput playerInput;
 
     [SerializeField]
@@ -63,6 +66,7 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (selectedInteraction != null)
             {
+                InteractionUI.Instance.Hide();
                 selectedInteraction = null;
                 OnAnySelectedInteractionChanged?.Invoke(gameObject, null);
             }
@@ -134,7 +138,7 @@ public class PlayerInteraction : MonoBehaviour
             shouldPerformAction)
         {
             shouldPerformAction = false;
-            selectedInteraction.PerformInteraction();
+            selectedInteraction.PerformInteraction(player);
         }
     }
 
