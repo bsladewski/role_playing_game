@@ -6,25 +6,25 @@ public enum DialogueEmotion
     /// <summary>
     /// Does not convey any specific emotion.
     /// </summary>
-    NEUTRAL,
+    NEUTRAL = 0,
 
     /// <summary>
     /// Conveys anger.
     /// </summary>
-    ANGRY,
+    ANGRY = 1,
 
     /// <summary>
     /// Conveys excitement.
     /// </summary>
-    EXCITED,
+    EXCITED = 2,
 
     /// <summary>
     /// Conveys sadness.
     /// </summary>
-    SAD,
+    SAD = 3,
 
     /// <summary>
     /// Conveys fear.
     /// </summary>
-    SCARED,
+    SCARED = 4,
 }

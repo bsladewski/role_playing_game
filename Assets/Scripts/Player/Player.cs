@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// Represents the player character.
@@ -15,13 +17,44 @@ public class Player : Actor
     /// </summary>
     public static event EventHandler<Player> OnAnyPlayerDestroyed;
 
+    [SerializeField]
+    private LookAtPosition lookAtPosition;
+
     private void Start()
     {
         OnAnyPlayerSpawned?.Invoke(gameObject, this);
+        DialogueSystem.Instance.OnDialogueStarted += DialogueSystem_OnDialogueStarted;
+        DialogueSystem.Instance.OnDialogueExchange += DialogueSystem_OnDialogueExchange;
     }
 
     private void OnDestroy()
     {
         OnAnyPlayerDestroyed?.Invoke(gameObject, this);
+    }
+
+    private void DialogueSystem_OnDialogueStarted(object sender, List<Actor> actors)
+    {
+        if (actors.Contains(this))
+        {
+            // find and look at the first NPC
+            foreach (Actor actor in actors)
+            {
+                if (actor is NPC)
+                {
+                    lookAtPosition.SetTargetPosition(actor.transform.position);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void DialogueSystem_OnDialogueExchange(object sender, DialogueExchange exchange)
+    {
+        Actor actor = DialogueSystem.Instance.GetActor(exchange.actorID);
+        if (actor != null && actor is NPC)
+        {
+            // look at the NPC who is speaking
+            lookAtPosition.SetTargetPosition(actor.transform.position);
+        }
     }
 }

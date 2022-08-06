@@ -34,7 +34,7 @@ public class LookAtPosition : MonoBehaviour
             return;
         }
 
-        Vector3 targetForward = (transform.forward - targetPosition.Value).normalized;
+        Vector3 targetForward = (transform.position - targetPosition.Value).normalized * -1f;
 
         if (Vector3.Distance(transform.forward, targetForward) < 0.1f)
         {
@@ -43,6 +43,10 @@ public class LookAtPosition : MonoBehaviour
             return;
         }
 
-        Vector3.Slerp(transform.forward, targetForward, turnSpeed * Time.deltaTime);
+        transform.forward = Vector3.Slerp(
+            transform.forward,
+            targetForward,
+            turnSpeed * Time.deltaTime
+        );
     }
 }

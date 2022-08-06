@@ -816,6 +816,7 @@ GameObject:
   - component: {fileID: 591812792}
   - component: {fileID: 591812791}
   - component: {fileID: 591812794}
+  - component: {fileID: 591812795}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -838,6 +839,7 @@ MonoBehaviour:
   actorID: Player
   actorDisplayName: Player
   actorDisplayNameColor: {r: 0.9245283, g: 0.7864907, b: 0.10902455, a: 1}
+  lookAtPosition: {fileID: 591812795}
 --- !u!4 &591812789
 Transform:
   m_ObjectHideFlags: 0
@@ -951,6 +953,19 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   interactionRadius: 2
+--- !u!114 &591812795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 591812787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c89e1cd5a0632b049a983b9e626c749f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turnSpeed: 10
 --- !u!1 &666306642
 GameObject:
   m_ObjectHideFlags: 0
@@ -1702,6 +1717,7 @@ GameObject:
   - component: {fileID: 1660036359}
   - component: {fileID: 1660036360}
   - component: {fileID: 1660036358}
+  - component: {fileID: 1660036361}
   m_Layer: 6
   m_Name: Steve
   m_TagString: Untagged
@@ -1803,6 +1819,7 @@ MonoBehaviour:
   actorID: Steve
   actorDisplayName: Steve
   actorDisplayNameColor: {r: 0.52156866, g: 0.64705884, b: 0.40784317, a: 1}
+  lookAtPosition: {fileID: 1660036361}
 --- !u!114 &1660036360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1816,6 +1833,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actor: {fileID: 1660036359}
+--- !u!114 &1660036361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1660036353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c89e1cd5a0632b049a983b9e626c749f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turnSpeed: 10
 --- !u!1 &1733046173
 GameObject:
   m_ObjectHideFlags: 0
