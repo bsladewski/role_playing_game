@@ -72,8 +72,13 @@ public class PlayerInteraction : MonoBehaviour
             }
             return;
         }
+        else
+        {
+            HandleGetSelectedInteraction();
+        }
 
-        HandleGetSelectedInteraction();
+        shouldPerformAction = false;
+        shouldChangeSelection = false;
     }
 
     private void HandleGetSelectedInteraction()
