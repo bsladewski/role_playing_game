@@ -21,6 +21,15 @@ public class ActorBusy : MonoBehaviour
         return isBusy;
     }
 
+    /// <summary>
+    /// Sets whether the actor is currently busy.
+    /// </summary>
+    /// <param name="isBusy">Whether the actor is busy.</param>
+    public void SetIsBusy(bool isBusy)
+    {
+        this.isBusy = isBusy;
+    }
+
     private void Start()
     {
         DialogueSystem.Instance.OnDialogueStarted += DialogueSystem_OnDialogueStarted;

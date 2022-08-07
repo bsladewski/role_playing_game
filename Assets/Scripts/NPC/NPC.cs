@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,13 +11,20 @@ public class NPC : Actor
     private Animator animator;
 
     [SerializeField]
+    private ActorBusy actorBusy;
+
+    [SerializeField]
     private LookAtPosition lookAtPosition;
+
+    [SerializeField]
+    private DialogueOneShot dialogueOneShotPrefab;
 
     private void Start()
     {
         DialogueSystem.Instance.OnDialogueStarted += DialogueSystem_OnDialogueStarted;
         DialogueSystem.Instance.OnDialogueEnded += DialogueSystem_OnDialogueEnded;
         DialogueSystem.Instance.OnDialogueExchange += DialogueSystem_OnDialogueExchange;
+        DialogueSystem.Instance.OnDialogueOneShot += DialogueSystem_OnDialogueOneShot;
     }
 
     private void DialogueSystem_OnDialogueStarted(object sender, List<Actor> actors)
@@ -55,5 +63,34 @@ public class NPC : Actor
             animator.SetBool("Talking", false);
             animator.SetInteger("Emotion", 0);
         }
+    }
+
+    private void DialogueSystem_OnDialogueOneShot(object sender, DialogueExchange exchange)
+    {
+        if (exchange.actorID != GetActorID())
+        {
+            return;
+        }
+
+        float dialogueOneShotDuration = 2f;
+        GameObject uiCanvas = GameObject.FindGameObjectWithTag("UI Canvas");
+        DialogueOneShot dialogueOneShot = Instantiate<DialogueOneShot>(dialogueOneShotPrefab);
+        dialogueOneShot.Initialize(this, exchange.text, dialogueOneShotDuration);
+        dialogueOneShot.transform.SetParent(uiCanvas.transform);
+        actorBusy.SetIsBusy(true);
+        animator.SetBool("Talking", true);
+        animator.SetInteger("Emotion", (int)exchange.emotion);
+        StartCoroutine(Delay(dialogueOneShotDuration, () =>
+        {
+            animator.SetBool("Talking", false);
+            animator.SetInteger("Emotion", 0);
+            actorBusy.SetIsBusy(false);
+        }));
+    }
+
+    private IEnumerator Delay(float delay, System.Action action)
+    {
+        yield return new WaitForSeconds(delay);
+        action();
     }
 }

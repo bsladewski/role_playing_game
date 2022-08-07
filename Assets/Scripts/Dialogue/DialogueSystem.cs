@@ -29,6 +29,11 @@ public class DialogueSystem : MonoBehaviour
     /// </summary>
     public event EventHandler<DialogueExchange> OnDialogueExchange;
 
+    /// <summary>
+    /// Fired whenever a dialogue one-shot occurs.
+    /// </summary>
+    public event EventHandler<DialogueExchange> OnDialogueOneShot;
+
     [SerializeField]
     private PlayerInput playerInput;
 
@@ -66,7 +71,7 @@ public class DialogueSystem : MonoBehaviour
         dialogueParser = new DialogueParser(dialogueText);
         if (dialogueParser.IsOneShot())
         {
-            // TODO: implement one-shot dialogues
+            OnDialogueOneShot?.Invoke(gameObject, dialogueParser.Next());
             return;
         }
 

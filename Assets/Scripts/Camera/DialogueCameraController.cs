@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Controls the camera during dialogue.
+/// </summary>
 public class DialogueCameraController : MonoBehaviour
 {
 

@@ -16,6 +16,9 @@ public class Actor : MonoBehaviour
     [SerializeField]
     private Color actorDisplayNameColor = Color.white;
 
+    [SerializeField]
+    private float actorHeight = 1.8f;
+
     /// <summary>
     /// Gets the id used to identify this actor during a dialogue.
     /// </summary>
@@ -41,5 +44,14 @@ public class Actor : MonoBehaviour
     public Color GetActorDisplayNameColor()
     {
         return actorDisplayNameColor;
+    }
+
+    /// <summary>
+    /// The height of the actor.
+    /// </summary>
+    /// <returns>The height of the actor.</returns>
+    public float GetActorHeight()
+    {
+        return actorHeight;
     }
 }
