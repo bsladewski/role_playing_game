@@ -17,7 +17,7 @@ Hello, Steve! My name is {{player.name}}! How are you doing?
 (excited) Yay!
 
 [Steve]
-(scared) Emotions have made me scared!
+(scared) Emotions have made me <color=purple>scared</color>!
 
 [Player]
 Well... Bye, Steve.

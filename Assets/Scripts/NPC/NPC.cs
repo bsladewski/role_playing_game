@@ -72,7 +72,7 @@ public class NPC : Actor
             return;
         }
 
-        float dialogueOneShotDuration = 2f;
+        float dialogueOneShotDuration = 3f;
         GameObject uiCanvas = GameObject.FindGameObjectWithTag("UI Canvas");
         DialogueOneShot dialogueOneShot = Instantiate<DialogueOneShot>(dialogueOneShotPrefab);
         dialogueOneShot.Initialize(this, exchange.text, dialogueOneShotDuration);

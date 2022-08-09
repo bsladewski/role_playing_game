@@ -17,11 +17,26 @@ public class Player : Actor
     /// </summary>
     public static event EventHandler<Player> OnAnyPlayerDestroyed;
 
+    /// <summary>
+    /// Fired whenever a player enters a building.
+    /// </summary>
+    public static event EventHandler<Building> OnAnyBuildingEntered;
+
+    /// <summary>
+    /// Fired whenever a player exits a building.
+    /// </summary>
+    public static event EventHandler<Building> OnAnyBuildingExited;
+
     [SerializeField]
     private Animator animator;
 
     [SerializeField]
     private LookAtPosition lookAtPosition;
+
+    [SerializeField]
+    private LayerMask roofLayerMask;
+
+    private Building currentBuilding;
 
     private void Start()
     {
@@ -29,6 +44,25 @@ public class Player : Actor
         DialogueSystem.Instance.OnDialogueStarted += DialogueSystem_OnDialogueStarted;
         DialogueSystem.Instance.OnDialogueEnded += DialogueSystem_OnDialogueEnded;
         DialogueSystem.Instance.OnDialogueExchange += DialogueSystem_OnDialogueExchange;
+    }
+
+    private void Update()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.up, out hit, 10f, roofLayerMask))
+        {
+            Building next = hit.collider.gameObject.GetComponentInParent<Building>();
+            if (next != currentBuilding)
+            {
+                currentBuilding = next;
+                OnAnyBuildingEntered?.Invoke(gameObject, currentBuilding);
+            }
+        }
+        else if (currentBuilding != null)
+        {
+            OnAnyBuildingExited?.Invoke(gameObject, currentBuilding);
+            currentBuilding = null;
+        }
     }
 
     private void OnDestroy()

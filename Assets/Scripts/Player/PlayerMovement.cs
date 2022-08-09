@@ -27,6 +27,8 @@ public class PlayerMovement : MonoBehaviour
     private float runSpeed = 6f;
     private float acceleration = 10f;
     private float turnSpeed = 15f;
+    private float gravity = 9.8f;
+    private float verticalSpeed;
 
     private Vector3 targetMovement;
 
@@ -83,6 +85,16 @@ public class PlayerMovement : MonoBehaviour
             movement = moveAction.ReadValue<Vector2>() * speed;
         }
 
+        // calculate vertical speed
+        if (characterController.isGrounded)
+        {
+            verticalSpeed = 0f;
+        }
+        else
+        {
+            verticalSpeed -= gravity * Time.deltaTime;
+        }
+
         // accelerate towards the movement vector
         targetMovement = Vector3.Lerp(
             targetMovement,
@@ -97,6 +109,6 @@ public class PlayerMovement : MonoBehaviour
             (transform.forward - targetMovement * -1f).normalized,
             turnSpeed * Time.deltaTime
         );
-        characterController.Move(targetMovement * Time.deltaTime);
+        characterController.Move((targetMovement + Vector3.up * verticalSpeed) * Time.deltaTime);
     }
 }
