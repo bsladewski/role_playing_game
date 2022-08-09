@@ -3631,7 +3631,7 @@ MonoBehaviour:
   outline: {fileID: 2125321178}
   isOneShot: 0
   cooldown: 3
-  requiresLineOfSight: 0
+  requiresLineOfSight: 1
 --- !u!114 &2125321178
 MonoBehaviour:
   m_ObjectHideFlags: 0
