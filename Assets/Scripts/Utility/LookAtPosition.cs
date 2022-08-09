@@ -16,7 +16,10 @@ public class LookAtPosition : MonoBehaviour
     /// <param name="targetPosition">The position to rotate towards.</param>
     public void SetTargetPosition(Vector3 targetPosition)
     {
-        this.targetPosition = targetPosition;
+        this.targetPosition = new Vector3(
+            targetPosition.x,
+            transform.position.y,
+            targetPosition.z);
     }
 
     /// <summary>
@@ -36,7 +39,7 @@ public class LookAtPosition : MonoBehaviour
 
         Vector3 targetForward = (transform.position - targetPosition.Value).normalized * -1f;
 
-        if (Vector3.Distance(transform.forward, targetForward) < 0.1f)
+        if (Vector3.Distance(transform.forward, targetForward) < 0.01f)
         {
             transform.forward = targetForward;
             targetPosition = null;

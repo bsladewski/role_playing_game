@@ -40,7 +40,9 @@ public class DialogueCameraController : MonoBehaviour
         }
 
         midPoint /= actors.Count;
-        Vector3 offset = Vector3.Cross((min - max), Vector3.up).normalized;
+        Vector3 offsetA = Vector3.Cross((max - min), Vector3.up).normalized;
+        Vector3 offsetB = Vector3.Cross((min - max), Vector3.up).normalized;
+        Vector3 offset = offsetA.z < offsetB.z ? offsetA : offsetB;
 
         transform.position = midPoint + offset;
         virtualCamera.SetActive(true);

@@ -98,6 +98,29 @@ public class PlayerInteraction : MonoBehaviour
             Interaction interaction = collider.gameObject.GetComponent<Interaction>();
             if (interaction != null && interaction.GetCanPerformInteraction())
             {
+                if (interaction.GetRequiresLineOfSight())
+                {
+                    Vector3 origin = transform.position + Vector3.up * player.GetActorHeight();
+                    Vector3 target = new Vector3(
+                        interaction.transform.position.x,
+                        player.GetActorHeight(),
+                        interaction.transform.position.z
+                    );
+
+                    RaycastHit hit;
+                    if (Physics.Raycast(
+                        origin,
+                        (origin - target).normalized * -1f,
+                        out hit,
+                        Vector3.Distance(origin, target)
+                    ))
+                    {
+                        if (hit.collider.gameObject != interaction.gameObject)
+                        {
+                            continue;
+                        }
+                    }
+                }
                 interactions.Add(interaction);
             }
         }

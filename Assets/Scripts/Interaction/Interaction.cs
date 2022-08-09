@@ -24,6 +24,9 @@ public class Interaction : MonoBehaviour
     [SerializeField]
     private float cooldown;
 
+    [SerializeField]
+    private bool requiresLineOfSight;
+
     private int interactionCount;
 
     private bool cooldownActive;
@@ -64,6 +67,11 @@ public class Interaction : MonoBehaviour
         interactionCount++;
         cooldownActive = true;
         StartCoroutine(Delay(cooldown, () => cooldownActive = false));
+    }
+
+    public bool GetRequiresLineOfSight()
+    {
+        return requiresLineOfSight;
     }
 
     private IEnumerator Delay(float delay, System.Action action)
