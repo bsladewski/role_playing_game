@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,6 +35,9 @@ public class ActorBusy : MonoBehaviour
     {
         DialogueSystem.Instance.OnDialogueStarted += DialogueSystem_OnDialogueStarted;
         DialogueSystem.Instance.OnDialogueEnded += DialogueSystem_OnDialogueEnded;
+
+        InventoryUI.Instance.OnInventoryOpened += InventoryUI_OnInventoryOpened;
+        InventoryUI.Instance.OnInventoryClosed += InventoryUI_OnInventoryClosed;
     }
 
     private void DialogueSystem_OnDialogueStarted(object sender, List<Actor> actors)
@@ -47,6 +51,22 @@ public class ActorBusy : MonoBehaviour
     private void DialogueSystem_OnDialogueEnded(object sender, List<Actor> actors)
     {
         if (actors.Contains(actor))
+        {
+            isBusy = false;
+        }
+    }
+
+    private void InventoryUI_OnInventoryOpened(object sender, EventArgs e)
+    {
+        if (actor is Player)
+        {
+            isBusy = true;
+        }
+    }
+
+    private void InventoryUI_OnInventoryClosed(object sender, EventArgs e)
+    {
+        if (actor is Player)
         {
             isBusy = false;
         }

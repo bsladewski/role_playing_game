@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Represents the player character.
@@ -36,7 +37,18 @@ public class Player : Actor
     [SerializeField]
     private LayerMask roofLayerMask;
 
+    [SerializeField]
+    private ActorBusy actorBusy;
+
+    [SerializeField]
+    private PlayerInput playerInput;
+
+    [SerializeField]
+    private Inventory inventory;
+
     private Building currentBuilding;
+
+    private InputAction openInventoryAction;
 
     private void Start()
     {
@@ -44,6 +56,16 @@ public class Player : Actor
         DialogueSystem.Instance.OnDialogueStarted += DialogueSystem_OnDialogueStarted;
         DialogueSystem.Instance.OnDialogueEnded += DialogueSystem_OnDialogueEnded;
         DialogueSystem.Instance.OnDialogueExchange += DialogueSystem_OnDialogueExchange;
+
+        openInventoryAction = playerInput.actions["Open Inventory"];
+
+        openInventoryAction.started += _ =>
+        {
+            if (!actorBusy.GetIsBusy())
+            {
+                InventoryUI.Instance.OpenInventory(inventory, inventory);
+            }
+        };
     }
 
     private void Update()

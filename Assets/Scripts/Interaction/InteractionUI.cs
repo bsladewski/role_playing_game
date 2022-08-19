@@ -24,7 +24,7 @@ public class InteractionUI : MonoBehaviour
     {
         if (Instance != null)
         {
-            Debug.LogError("Singleton InteractionUI alread exists!");
+            Debug.LogError("Singleton InteractionUI already exists!");
             Destroy(gameObject);
             return;
         }
