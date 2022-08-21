@@ -523,7 +523,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.56062883, y: -0.000000014248036, z: 0.000000009646391, w: 0.82806724}
+  m_LocalRotation: {x: 0.56062883, y: 0.000000014248048, z: -0.000000009646399, w: 0.82806724}
   m_LocalPosition: {x: 0, y: 10, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3796,6 +3796,7 @@ GameObject:
   - component: {fileID: 1624628847}
   - component: {fileID: 1624628848}
   - component: {fileID: 1624628846}
+  - component: {fileID: 1624628849}
   m_Layer: 0
   m_Name: Game Systems
   m_TagString: Untagged
@@ -3862,6 +3863,19 @@ MonoBehaviour:
   m_DefaultActionMap: UI
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &1624628849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1624628845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b2df888a29048c41bf1b628123abb13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  items: {fileID: 11400000, guid: 92ea1a2af98c95846985163f4a722dbd, type: 2}
 --- !u!1 &1660036353
 GameObject:
   m_ObjectHideFlags: 0
@@ -4284,7 +4298,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1787078647}
-  m_LocalRotation: {x: 0.56062883, y: -0.000000014248036, z: 0.000000009646391, w: 0.82806724}
+  m_LocalRotation: {x: 0.56062883, y: 0.000000014248048, z: -0.000000009646399, w: 0.82806724}
   m_LocalPosition: {x: 0, y: 10, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4677,18 +4691,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryUIPanel: {fileID: 517786381}
-  otherInventoryPanel: {fileID: 942366513}
-  playerInventoryTitle: {fileID: 1793382584}
-  otherInventoryTitle: {fileID: 1596079140}
-  playerInventoryScrollRect: {fileID: 1247801036}
-  playerInventoryViewportRectTransform: {fileID: 761628065}
-  playerInventoryGridLayoutGroup: {fileID: 1090964822}
-  otherInventoryScrollRect: {fileID: 965274507}
-  otherInventoryViewportRectTransport: {fileID: 876075537}
-  otherInventoryGridLayoutGroup: {fileID: 798564067}
   itemStackUIPrefab: {fileID: 6536372940290219988, guid: c8f5e6e6a3d4a93439757e487509316e,
     type: 3}
   playerInput: {fileID: 1827915466}
+  selectedItemTitle: {fileID: 2018102321}
+  selectedItemDescription: {fileID: 1046129843}
+  playerInventoryTitle: {fileID: 1793382584}
+  playerInventoryScrollRect: {fileID: 1247801036}
+  playerInventoryViewportRectTransform: {fileID: 761628065}
+  playerInventoryGridLayoutGroup: {fileID: 1090964822}
+  otherInventoryPanel: {fileID: 942366513}
+  otherInventoryTitle: {fileID: 1596079140}
+  otherInventoryScrollRect: {fileID: 965274507}
+  otherInventoryViewportRectTransport: {fileID: 876075537}
+  otherInventoryGridLayoutGroup: {fileID: 798564067}
 --- !u!114 &1827915466
 MonoBehaviour:
   m_ObjectHideFlags: 0

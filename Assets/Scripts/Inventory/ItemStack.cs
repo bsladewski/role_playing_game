@@ -32,6 +32,24 @@ public class ItemStack
     }
 
     /// <summary>
+    /// Returns the name of the item stored within this stack.
+    /// </summary>
+    /// <returns>The name of the item stored within this stack.</returns>
+    public string GetItemName()
+    {
+        return item.GetItemName();
+    }
+
+    /// <summary>
+    /// Returns a description of the item stored within this stack.
+    /// </summary>
+    /// <returns>A description of the item stored within this stack.</returns>
+    public string GetItemDescription()
+    {
+        return item.GetItemDescription();
+    }
+
+    /// <summary>
     /// Gets the size of this stack.
     /// </summary>
     /// <returns>The size of this stack.</returns>
@@ -50,6 +68,20 @@ public class ItemStack
     }
 
     /// <summary>
+    /// Returns the number of items that can be added to this stack.
+    /// </summary>
+    /// <returns>The number of items that can be added to this stack.</returns>
+    public int GetRemainingCapacity()
+    {
+        int remainingCapacity = GetMaxStackSize() - GetStackSize();
+        if (remainingCapacity < 0)
+        {
+            remainingCapacity = 0;
+        }
+        return remainingCapacity;
+    }
+
+    /// <summary>
     /// Gets the sprite used to display this item in the UI.
     /// </summary>
     /// <returns>The sprite used to display this item in the UI.</returns>
@@ -64,14 +96,14 @@ public class ItemStack
     /// <param name="other">The stack to transfer to.</param>
     public void Transfer(ItemStack other)
     {
-        int remainingCapacity = item.GetMaxStackSize() - stackSize;
-        int amountToTransfer = Mathf.Min(other.stackSize, stackSize);
+        int remainingCapacity = other.GetRemainingCapacity();
+        int amountToTransfer = Mathf.Min(stackSize, remainingCapacity);
         if (amountToTransfer <= 0)
         {
             return;
         }
 
-        stackSize += amountToTransfer;
-        other.stackSize -= amountToTransfer;
+        stackSize -= amountToTransfer;
+        other.stackSize += amountToTransfer;
     }
 }

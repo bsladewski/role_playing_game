@@ -3,17 +3,32 @@ using UnityEngine;
 /// <summary>
 /// Stores basic properties about an in-game item.
 /// </summary>
-[CreateAssetMenu(fileName = "Item", menuName = "Role-Playing Game/Item", order = 0)]
+[CreateAssetMenu(fileName = "Item", menuName = "Role-Playing Game/Item", order = 1)]
 public class Item : ScriptableObject
 {
+    [SerializeField]
+    private int itemID;
+
     [SerializeField]
     private string itemName;
 
     [SerializeField]
-    private int maxStackSize = 1;
+    private string itemDescription;
 
     [SerializeField]
     private Sprite itemUISprite;
+
+    [SerializeField]
+    private int maxStackSize = 1;
+
+    /// <summary>
+    /// Gets an identifier for this item.
+    /// </summary>
+    /// <returns>An identifier for this item.</returns>
+    public int GetItemID()
+    {
+        return itemID;
+    }
 
     /// <summary>
     /// Gets the name of this item.
@@ -25,12 +40,12 @@ public class Item : ScriptableObject
     }
 
     /// <summary>
-    /// Gets the maximum size of a stack of this item.
+    /// Gets a description of this item.
     /// </summary>
-    /// <returns>The maximum stack size.</returns>
-    public int GetMaxStackSize()
+    /// <returns>A description of this item.</returns>
+    public string GetItemDescription()
     {
-        return maxStackSize;
+        return itemDescription;
     }
 
     /// <summary>
@@ -40,5 +55,14 @@ public class Item : ScriptableObject
     public Sprite GetItemUISprite()
     {
         return itemUISprite;
+    }
+
+    /// <summary>
+    /// Gets the maximum size of a stack of this item.
+    /// </summary>
+    /// <returns>The maximum stack size.</returns>
+    public int GetMaxStackSize()
+    {
+        return maxStackSize;
     }
 }

@@ -34,13 +34,20 @@ public class InventoryUI : MonoBehaviour
     private GameObject inventoryUIPanel;
 
     [SerializeField]
-    private GameObject otherInventoryPanel;
+    private ItemStackUI itemStackUIPrefab;
 
+    [SerializeField]
+    private PlayerInput playerInput;
+
+    [SerializeField]
+    private TextMeshProUGUI selectedItemTitle;
+
+    [SerializeField]
+    private TextMeshProUGUI selectedItemDescription;
+
+    [HeaderAttribute("Player Inventory")]
     [SerializeField]
     private TextMeshProUGUI playerInventoryTitle;
-
-    [SerializeField]
-    private TextMeshProUGUI otherInventoryTitle;
 
     [SerializeField]
     private ScrollRect playerInventoryScrollRect;
@@ -51,6 +58,13 @@ public class InventoryUI : MonoBehaviour
     [SerializeField]
     private GridLayoutGroup playerInventoryGridLayoutGroup;
 
+    [HeaderAttribute("Other Inventory")]
+    [SerializeField]
+    private GameObject otherInventoryPanel;
+
+    [SerializeField]
+    private TextMeshProUGUI otherInventoryTitle;
+
     [SerializeField]
     private ScrollRect otherInventoryScrollRect;
 
@@ -59,12 +73,6 @@ public class InventoryUI : MonoBehaviour
 
     [SerializeField]
     private GridLayoutGroup otherInventoryGridLayoutGroup;
-
-    [SerializeField]
-    private ItemStackUI itemStackUIPrefab;
-
-    [SerializeField]
-    private PlayerInput playerInput;
 
     private int inventoryGridWidth = TWO_COLUMN_GRID_WIDTH;
 
@@ -146,7 +154,7 @@ public class InventoryUI : MonoBehaviour
         }
 
         // select the first item in the player's inventory and open the inventory UI
-        SelectItemStack(playerItemStackUIs[0]);
+        SelectItemStack(playerItemStackUIs[0], true);
         playerInventoryGridLayoutGroup.GetComponent<RectTransform>().localPosition = Vector2.zero;
         otherInventoryGridLayoutGroup.GetComponent<RectTransform>().localPosition = Vector2.zero;
         inventoryUIPanel.SetActive(true);
@@ -263,13 +271,6 @@ public class InventoryUI : MonoBehaviour
             selectedContentPanel = otherContentPanel;
         }
 
-        float maxHeight = selectedGridLayoutGroup.preferredHeight;
-        if (maxHeight == 0f)
-        {
-            selectedContentPanel.localPosition = Vector2.zero;
-            return;
-        }
-
         // calculate viewport bounds
         float viewportHeight = selectedViewport.rect.height;
         float viewportTopY = selectedContentPanel.localPosition.y;
@@ -305,7 +306,21 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    private void SelectItemStack(ItemStackUI itemStackUI)
+    private void SetSelectedItemText()
+    {
+        if (selectedItemStackUI == null || selectedItemStackUI.GetItemStack() == null)
+        {
+            selectedItemTitle.text = "No Item Selected";
+            selectedItemDescription.text = "";
+        }
+        else
+        {
+            selectedItemTitle.text = selectedItemStackUI.GetItemStack().GetItemName();
+            selectedItemDescription.text = selectedItemStackUI.GetItemStack().GetItemDescription();
+        }
+    }
+
+    private void SelectItemStack(ItemStackUI itemStackUI, bool isInitializing = false)
     {
         if (selectedItemStackUI != null)
         {
@@ -318,10 +333,13 @@ public class InventoryUI : MonoBehaviour
         selectedItemStackUI.Select();
 
         // ensure the item is visible in the scroll view
-        SnapToSelectedItem();
+        if (!isInitializing)
+        {
+            SnapToSelectedItem();
+        }
 
         // update the selected item details text
-        // TODO:
+        SetSelectedItemText();
     }
 
     private Vector2Int IndexToCoordinate(int index)

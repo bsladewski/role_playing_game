@@ -64,7 +64,26 @@ public class Inventory : MonoBehaviour
         {
             ItemStack newItemStack = new ItemStack(itemStack.GetItem(), 0);
             itemStack.Transfer(newItemStack);
+            itemStacks.Add(newItemStack);
         }
+
+        Prune();
+    }
+
+    /// <summary>
+    /// Transfers an item stack from this inventory to another inventory.
+    /// </summary>
+    /// <param name="itemStack">The item stack to transfer.</param>
+    /// <param name="other">The inventory to transfer the item stack to.</param>
+    public void TransferItem(ItemStack itemStack, Inventory other)
+    {
+        if (!Contains(itemStack))
+        {
+            return;
+        }
+
+        other.AddItem(itemStack);
+        Prune();
     }
 
     /// <summary>
@@ -102,5 +121,10 @@ public class Inventory : MonoBehaviour
     public bool Contains(ItemStack itemStack)
     {
         return itemStacks.Contains(itemStack);
+    }
+
+    private void Prune()
+    {
+        itemStacks.RemoveAll(itemStack => itemStack.GetStackSize() <= 0);
     }
 }

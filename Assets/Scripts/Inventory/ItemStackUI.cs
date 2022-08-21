@@ -62,7 +62,14 @@ public class ItemStackUI : MonoBehaviour
         else
         {
             itemImage.sprite = itemStack.GetItemUISprite();
-            itemCount.text = $"{itemStack.GetStackSize()}/{itemStack.GetMaxStackSize()}";
+            if (itemStack.GetMaxStackSize() > 999)
+            {
+                itemCount.text = $"{itemStack.GetStackSize()}";
+            }
+            else
+            {
+                itemCount.text = $"{itemStack.GetStackSize()}/{itemStack.GetMaxStackSize()}";
+            }
             itemImage.gameObject.SetActive(true);
             itemCount.gameObject.SetActive(true);
         }

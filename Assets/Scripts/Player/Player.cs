@@ -56,6 +56,7 @@ public class Player : Actor
         DialogueSystem.Instance.OnDialogueStarted += DialogueSystem_OnDialogueStarted;
         DialogueSystem.Instance.OnDialogueEnded += DialogueSystem_OnDialogueEnded;
         DialogueSystem.Instance.OnDialogueExchange += DialogueSystem_OnDialogueExchange;
+        inventory.AddItem(ItemStackFactory.Instance.CreateItemStack(0, 100));
 
         openInventoryAction = playerInput.actions["Open Inventory"];
 
