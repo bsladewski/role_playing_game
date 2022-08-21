@@ -45,10 +45,16 @@ public class InventoryUI : MonoBehaviour
     private ScrollRect playerInventoryScrollRect;
 
     [SerializeField]
-    private ScrollRect otherInventoryScrollRect;
+    private RectTransform playerInventoryViewportRectTransform;
 
     [SerializeField]
     private GridLayoutGroup playerInventoryGridLayoutGroup;
+
+    [SerializeField]
+    private ScrollRect otherInventoryScrollRect;
+
+    [SerializeField]
+    private RectTransform otherInventoryViewportRectTransport;
 
     [SerializeField]
     private GridLayoutGroup otherInventoryGridLayoutGroup;
@@ -173,6 +179,7 @@ public class InventoryUI : MonoBehaviour
     public void CloseInventory()
     {
         ClearInventoryGrid();
+        ResetScollView();
         isOtherInventorySelected = false;
         inventoryUIPanel.SetActive(false);
         isOpen = false;
@@ -225,6 +232,59 @@ public class InventoryUI : MonoBehaviour
         return itemStackUIs.ToArray();
     }
 
+    private void ResetScollView()
+    {
+        playerInventoryGridLayoutGroup.GetComponent<RectTransform>().localPosition = Vector2.zero;
+        otherInventoryGridLayoutGroup.GetComponent<RectTransform>().localPosition = Vector2.zero;
+    }
+
+    private void SnapToSelectedItem()
+    {
+        Canvas.ForceUpdateCanvases();
+
+        RectTransform selectedItemRectTransform = selectedItemStackUI.GetComponent<RectTransform>();
+        ScrollRect selectedScrollRect = playerInventoryScrollRect;
+        RectTransform selectedViewport = playerInventoryViewportRectTransform;
+        GridLayoutGroup selectedGridLayoutGroup = playerInventoryGridLayoutGroup;
+        RectTransform selectedContentPanel = playerInventoryGridLayoutGroup.GetComponent<RectTransform>();
+        if (isOtherInventorySelected)
+        {
+            selectedScrollRect = otherInventoryScrollRect;
+            selectedViewport = otherInventoryViewportRectTransport;
+            selectedGridLayoutGroup = otherInventoryGridLayoutGroup;
+            selectedContentPanel = otherInventoryGridLayoutGroup.GetComponent<RectTransform>();
+        }
+
+        float maxHeight = selectedGridLayoutGroup.preferredHeight;
+        if (maxHeight == 0f)
+        {
+            selectedContentPanel.localPosition = Vector2.zero;
+            return;
+        }
+
+        // calculate viewport bounds
+        float viewportHeight = selectedViewport.rect.height;
+        float viewportTopY = selectedContentPanel.localPosition.y;
+        float viewportBottomY = viewportTopY + viewportHeight;
+
+        // calculate selected item bounds
+        float selectedItemY = selectedItemRectTransform.localPosition.y * -1f;
+        float selectedItemTopY = selectedItemY - selectedItemRectTransform.rect.height / 2;
+        float selectedItemBottomY = selectedItemY + selectedItemRectTransform.rect.height / 2;
+
+        if (selectedItemTopY < viewportTopY)
+        {
+            // if the item is above the viewport focus the top of the viewport on the selected item
+            selectedContentPanel.localPosition = new Vector2(0f, selectedItemTopY);
+        }
+
+        if (selectedItemBottomY > viewportBottomY)
+        {
+            // if the item is below the viewport focus the bottom of the viewport on the selected item
+            selectedContentPanel.localPosition = new Vector2(0f, selectedItemBottomY - viewportHeight);
+        }
+    }
+
     private void SelectItemStack(ItemStackUI itemStackUI)
     {
         if (selectedItemStackUI != null)
@@ -238,7 +298,7 @@ public class InventoryUI : MonoBehaviour
         selectedItemStackUI.Select();
 
         // ensure the item is visible in the scroll view
-        // TODO:
+        SnapToSelectedItem();
 
         // update the selected item details text
         // TODO:
