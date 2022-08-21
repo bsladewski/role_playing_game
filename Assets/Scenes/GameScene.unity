@@ -523,7 +523,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.56062883, y: 0.000000014248048, z: -0.000000009646399, w: 0.82806724}
+  m_LocalRotation: {x: 0.56062883, y: -0.000000014248036, z: 0.000000009646391, w: 0.82806724}
   m_LocalPosition: {x: 0, y: 10, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1398,7 +1398,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryTitle: Inventory
-  maxSlots: 100
+  maxSlots: 97
 --- !u!1001 &659244327
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2281,7 +2281,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Content: {fileID: 798564066}
   m_Horizontal: 0
-  m_Vertical: 1
+  m_Vertical: 0
   m_MovementType: 1
   m_Elasticity: 0.1
   m_Inertia: 1
@@ -4284,7 +4284,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1787078647}
-  m_LocalRotation: {x: 0.56062883, y: 0.000000014248048, z: -0.000000009646399, w: 0.82806724}
+  m_LocalRotation: {x: 0.56062883, y: -0.000000014248036, z: 0.000000009646391, w: 0.82806724}
   m_LocalPosition: {x: 0, y: 10, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -146,6 +147,8 @@ public class InventoryUI : MonoBehaviour
 
         // select the first item in the player's inventory and open the inventory UI
         SelectItemStack(playerItemStackUIs[0]);
+        playerInventoryGridLayoutGroup.GetComponent<RectTransform>().localPosition = Vector2.zero;
+        otherInventoryGridLayoutGroup.GetComponent<RectTransform>().localPosition = Vector2.zero;
         inventoryUIPanel.SetActive(true);
         isOpen = true;
         OnInventoryOpened?.Invoke(gameObject, EventArgs.Empty);
@@ -242,17 +245,22 @@ public class InventoryUI : MonoBehaviour
     {
         Canvas.ForceUpdateCanvases();
 
-        RectTransform selectedItemRectTransform = selectedItemStackUI.GetComponent<RectTransform>();
         ScrollRect selectedScrollRect = playerInventoryScrollRect;
+
+        RectTransform selectedItemRectTransform = selectedItemStackUI.GetComponent<RectTransform>();
         RectTransform selectedViewport = playerInventoryViewportRectTransform;
+
+        RectTransform playerContentPanel = playerInventoryGridLayoutGroup.GetComponent<RectTransform>();
+        RectTransform otherContentPanel = otherInventoryGridLayoutGroup.GetComponent<RectTransform>();
+
         GridLayoutGroup selectedGridLayoutGroup = playerInventoryGridLayoutGroup;
-        RectTransform selectedContentPanel = playerInventoryGridLayoutGroup.GetComponent<RectTransform>();
+        RectTransform selectedContentPanel = playerContentPanel;
         if (isOtherInventorySelected)
         {
             selectedScrollRect = otherInventoryScrollRect;
             selectedViewport = otherInventoryViewportRectTransport;
             selectedGridLayoutGroup = otherInventoryGridLayoutGroup;
-            selectedContentPanel = otherInventoryGridLayoutGroup.GetComponent<RectTransform>();
+            selectedContentPanel = otherContentPanel;
         }
 
         float maxHeight = selectedGridLayoutGroup.preferredHeight;
@@ -275,13 +283,25 @@ public class InventoryUI : MonoBehaviour
         if (selectedItemTopY < viewportTopY)
         {
             // if the item is above the viewport focus the top of the viewport on the selected item
-            selectedContentPanel.localPosition = new Vector2(0f, selectedItemTopY);
+            StopCoroutine("ScrollInventory");
+            Vector2 targetLocalPosition = new Vector2(0f, selectedItemTopY);
+            StartCoroutine(ScrollInventory(
+                selectedContentPanel.localPosition,
+                targetLocalPosition,
+                0.1f));
         }
 
         if (selectedItemBottomY > viewportBottomY)
         {
             // if the item is below the viewport focus the bottom of the viewport on the selected item
-            selectedContentPanel.localPosition = new Vector2(0f, selectedItemBottomY - viewportHeight);
+            StopCoroutine("ScrollInventory");
+            float padding = selectedGridLayoutGroup.spacing.y;
+            Vector2 targetLocalPosition = new Vector2(
+                0f, selectedItemBottomY - viewportHeight - padding);
+            StartCoroutine(ScrollInventory(
+                selectedContentPanel.localPosition,
+                targetLocalPosition,
+                0.1f));
         }
     }
 
@@ -521,5 +541,25 @@ public class InventoryUI : MonoBehaviour
         SelectItemStack(GetItemStackUIByCoordinate(new Vector2Int(
             0, selectedCoordinate.y
         )));
+    }
+
+    private IEnumerator ScrollInventory(Vector3 initialLocalPosition, Vector3 targetLocalPosition, float duration)
+    {
+        RectTransform playerContentPanel = playerInventoryGridLayoutGroup.GetComponent<RectTransform>();
+        RectTransform otherContentPanel = otherInventoryGridLayoutGroup.GetComponent<RectTransform>();
+
+        for (float time = 0; time < duration; time += Time.deltaTime)
+        {
+            Vector3 localPosition = Vector3.Lerp(
+                initialLocalPosition,
+                targetLocalPosition,
+                time / duration);
+            playerContentPanel.localPosition = localPosition;
+            otherContentPanel.localPosition = localPosition;
+            yield return null;
+        }
+
+        playerContentPanel.localPosition = targetLocalPosition;
+        otherContentPanel.localPosition = targetLocalPosition;
     }
 }

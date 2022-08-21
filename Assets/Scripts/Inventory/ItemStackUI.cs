@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -23,9 +24,16 @@ public class ItemStackUI : MonoBehaviour
 
     private ItemStack itemStack;
 
+    private Vector3 localScale;
+
     private void Awake()
     {
         deselectedAlpha = background.color.a;
+    }
+
+    private void Start()
+    {
+        localScale = transform.localScale;
     }
 
     /// <summary>
@@ -68,6 +76,11 @@ public class ItemStackUI : MonoBehaviour
         Color backgroundColor = background.color;
         backgroundColor.a = selectedAlpha;
         background.color = backgroundColor;
+
+        if (gameObject.activeInHierarchy)
+        {
+            StartCoroutine(PingPongScale(0.1f, 0.1f));
+        }
     }
 
     /// <summary>
@@ -78,5 +91,20 @@ public class ItemStackUI : MonoBehaviour
         Color backgroundColor = background.color;
         backgroundColor.a = deselectedAlpha;
         background.color = backgroundColor;
+        transform.localScale = localScale;
+    }
+
+    private IEnumerator PingPongScale(float scaleDelta, float duration)
+    {
+        Vector3 initialScale = localScale;
+        Vector3 targetScale = initialScale + new Vector3(1f, 1f, 0f) * scaleDelta;
+
+        for (float time = 0; time < duration * 2; time += Time.deltaTime)
+        {
+            float progress = Mathf.PingPong(time, duration) / duration;
+            transform.localScale = Vector3.Lerp(initialScale, targetScale, progress);
+            yield return null;
+        }
+        transform.localScale = initialScale;
     }
 }

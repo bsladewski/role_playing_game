@@ -63,7 +63,7 @@ public class Player : Actor
         {
             if (!actorBusy.GetIsBusy())
             {
-                InventoryUI.Instance.OpenInventory(inventory, inventory);
+                InventoryUI.Instance.OpenInventory(inventory);
             }
         };
     }
