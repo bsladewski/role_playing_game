@@ -50,6 +50,15 @@ public class Player : Actor
 
     private InputAction openInventoryAction;
 
+    /// <summary>
+    /// Gets the player inventory.
+    /// </summary>
+    /// <returns>The player inventory.</returns>
+    public Inventory GetPlayerInventory()
+    {
+        return inventory;
+    }
+
     private void Start()
     {
         OnAnyPlayerSpawned?.Invoke(gameObject, this);
