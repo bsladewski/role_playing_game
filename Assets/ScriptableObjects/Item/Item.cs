@@ -13,13 +13,17 @@ public class Item : ScriptableObject
     private string itemName;
 
     [SerializeField]
-    private string itemDescription;
-
-    [SerializeField]
     private Sprite itemUISprite;
 
     [SerializeField]
+    private Color itemUISpriteColor = Color.white;
+
+    [SerializeField]
     private int maxStackSize = 1;
+
+    [SerializeField]
+    [TextArea]
+    private string itemDescription;
 
     /// <summary>
     /// Gets an identifier for this item.
@@ -55,6 +59,15 @@ public class Item : ScriptableObject
     public Sprite GetItemUISprite()
     {
         return itemUISprite;
+    }
+
+    /// <summary>
+    /// Gets the color of the sprite used to display the item in the UI.
+    /// </summary>
+    /// <returns>The color of the sprite used to display the item in the UI.</returns>
+    public Color GetItemUISpriteColor()
+    {
+        return itemUISpriteColor;
     }
 
     /// <summary>

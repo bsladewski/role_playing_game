@@ -62,6 +62,7 @@ public class ItemStackUI : MonoBehaviour
         else
         {
             itemImage.sprite = itemStack.GetItemUISprite();
+            itemImage.color = itemStack.GetItemUISpriteColor();
             if (itemStack.GetMaxStackSize() > 999)
             {
                 itemCount.text = $"{itemStack.GetStackSize()}";

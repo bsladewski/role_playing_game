@@ -7,6 +7,7 @@ using UnityEngine;
 /// </summary>
 public class NPC : Actor
 {
+    [HeaderAttribute("NPC")]
     [SerializeField]
     private Animator animator;
 

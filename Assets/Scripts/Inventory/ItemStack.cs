@@ -91,6 +91,15 @@ public class ItemStack
     }
 
     /// <summary>
+    /// Gets the color of the sprite used to display this item in the UI.
+    /// </summary>
+    /// <returns>The color of the sprite used to display this item in the UI.</returns>
+    public Color GetItemUISpriteColor()
+    {
+        return item.GetItemUISpriteColor();
+    }
+
+    /// <summary>
     /// Transfers items from this stack to another stack.
     /// </summary>
     /// <param name="other">The stack to transfer to.</param>

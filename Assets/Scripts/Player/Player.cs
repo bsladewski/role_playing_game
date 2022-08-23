@@ -28,6 +28,7 @@ public class Player : Actor
     /// </summary>
     public static event EventHandler<Building> OnAnyBuildingExited;
 
+    [HeaderAttribute("Player")]
     [SerializeField]
     private Animator animator;
 
@@ -65,6 +66,8 @@ public class Player : Actor
         DialogueSystem.Instance.OnDialogueStarted += DialogueSystem_OnDialogueStarted;
         DialogueSystem.Instance.OnDialogueEnded += DialogueSystem_OnDialogueEnded;
         DialogueSystem.Instance.OnDialogueExchange += DialogueSystem_OnDialogueExchange;
+
+        // TODO: remove test items
         inventory.AddItem(ItemStackFactory.Instance.CreateItemStack(0, 100));
 
         openInventoryAction = playerInput.actions["Open Inventory"];
