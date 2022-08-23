@@ -87,7 +87,7 @@ public class ItemStackUI : MonoBehaviour
 
         if (gameObject.activeInHierarchy)
         {
-            StartCoroutine(PingPongScale(0.1f, 0.1f));
+            StartCoroutine(PingPongScale(0.05f, 0.1f));
         }
     }
 

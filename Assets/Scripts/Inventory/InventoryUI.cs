@@ -229,7 +229,7 @@ public class InventoryUI : MonoBehaviour
         {
             ItemStackUI itemStackUI = Instantiate<ItemStackUI>(itemStackUIPrefab);
             itemStackUI.SetItemStack(itemStack);
-            itemStackUI.transform.SetParent(gridLayoutGroup.transform);
+            itemStackUI.transform.SetParent(gridLayoutGroup.transform, false);
             itemStackUIs.Add(itemStackUI);
         }
 
@@ -238,7 +238,7 @@ public class InventoryUI : MonoBehaviour
         {
             ItemStackUI itemStackUI = Instantiate<ItemStackUI>(itemStackUIPrefab);
             itemStackUI.SetItemStack(null);
-            itemStackUI.transform.SetParent(gridLayoutGroup.transform);
+            itemStackUI.transform.SetParent(gridLayoutGroup.transform, false);
             itemStackUIs.Add(itemStackUI);
         }
 
@@ -299,9 +299,8 @@ public class InventoryUI : MonoBehaviour
         {
             // if the item is below the viewport focus the bottom of the viewport on the selected item
             StopCoroutine("ScrollInventory");
-            float padding = selectedGridLayoutGroup.spacing.y;
             Vector2 targetLocalPosition = new Vector2(
-                0f, selectedItemBottomY - viewportHeight - padding);
+                0f, selectedItemBottomY - viewportHeight);
             StartCoroutine(ScrollInventory(
                 selectedContentPanel.localPosition,
                 targetLocalPosition,
