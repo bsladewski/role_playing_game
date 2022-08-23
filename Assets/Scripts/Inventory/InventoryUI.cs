@@ -83,9 +83,10 @@ public class InventoryUI : MonoBehaviour
     private InputAction downAction;
     private InputAction leftAction;
     private InputAction rightAction;
+    private InputAction transferAction;
 
-    private ItemStackUI[] playerItemStackUIs;
-    private ItemStackUI[] otherItemStackUIs;
+    private List<ItemStackUI> playerItemStackUIs;
+    private List<ItemStackUI> otherItemStackUIs;
 
     private ItemStackUI selectedItemStackUI;
 
@@ -111,6 +112,7 @@ public class InventoryUI : MonoBehaviour
         downAction = playerInput.actions["Down"];
         leftAction = playerInput.actions["Left"];
         rightAction = playerInput.actions["Right"];
+        transferAction = playerInput.actions["Transfer"];
 
         // bind player input action handlers
         closeAction.started += _ => { if (isOpen) { CloseInventory(); } };
@@ -118,6 +120,7 @@ public class InventoryUI : MonoBehaviour
         downAction.started += _ => { if (isOpen) { SelectDown(); } };
         leftAction.started += _ => { if (isOpen) { SelectLeft(); } };
         rightAction.started += _ => { if (isOpen) { SelectRight(); } };
+        transferAction.started += _ => { if (isOpen) { TransferStack(); } };
     }
 
     /// <summary>
@@ -218,7 +221,7 @@ public class InventoryUI : MonoBehaviour
         otherItemStackUIs = null;
     }
 
-    private ItemStackUI[] PopulateInventoryGrid(GridLayoutGroup gridLayoutGroup, Inventory inventory)
+    private List<ItemStackUI> PopulateInventoryGrid(GridLayoutGroup gridLayoutGroup, Inventory inventory)
     {
         // populate the UI elements that represent each item stack in the specified inventory
         List<ItemStackUI> itemStackUIs = new List<ItemStackUI>();
@@ -240,7 +243,7 @@ public class InventoryUI : MonoBehaviour
         }
 
         // return an array representation of the created UI elements
-        return itemStackUIs.ToArray();
+        return itemStackUIs;
     }
 
     private void ResetScollView()
@@ -358,7 +361,7 @@ public class InventoryUI : MonoBehaviour
     private ItemStackUI GetItemStackUIByCoordinate(Vector2Int coordinate)
     {
         // get the selected inventory
-        ItemStackUI[] selectedItemStacks = playerItemStackUIs;
+        List<ItemStackUI> selectedItemStacks = playerItemStackUIs;
         if (isOtherInventorySelected)
         {
             selectedItemStacks = otherItemStackUIs;
@@ -366,7 +369,7 @@ public class InventoryUI : MonoBehaviour
 
         // check if the supplied coordinate is outside of the bounds of the selected inventory
         int index = CoordinateToIndex(coordinate);
-        if (index >= selectedItemStacks.Length)
+        if (index >= selectedItemStacks.Count)
         {
             return null;
         }
@@ -384,14 +387,14 @@ public class InventoryUI : MonoBehaviour
         }
 
         // get the selected inventory
-        ItemStackUI[] selectedItemStackUIs = playerItemStackUIs;
+        List<ItemStackUI> selectedItemStackUIs = playerItemStackUIs;
         if (isOtherInventorySelected)
         {
             selectedItemStackUIs = otherItemStackUIs;
         }
 
         // search for the specified item stack UI element in the selected inventory
-        for (int i = 0; i < selectedItemStackUIs.Length; i++)
+        for (int i = 0; i < selectedItemStackUIs.Count; i++)
         {
             if (selectedItemStackUIs[i] == itemStackUI)
             {
@@ -423,7 +426,7 @@ public class InventoryUI : MonoBehaviour
         {
             // if the selected item is in the top row of the inventory selected the furthest item
             // in the same column
-            int maxInventoryY = (playerItemStackUIs.Length / inventoryGridWidth) + 1;
+            int maxInventoryY = (playerItemStackUIs.Count / inventoryGridWidth) + 1;
             for (int y = maxInventoryY; y >= 0; y--)
             {
                 ItemStackUI itemStackUI = GetItemStackUIByCoordinate(new Vector2Int(
@@ -443,7 +446,7 @@ public class InventoryUI : MonoBehaviour
         // get the coordinates for the selected item stack UI element
         Vector2Int selectedCoordinate = GetCoordinateByItemStackUI(selectedItemStackUI);
 
-        int maxInventoryY = playerItemStackUIs.Length / inventoryGridWidth;
+        int maxInventoryY = playerItemStackUIs.Count / inventoryGridWidth;
         if (selectedCoordinate.y < maxInventoryY)
         {
             // if the selected item is not in the bottom inventory row select the top item in the
@@ -559,6 +562,37 @@ public class InventoryUI : MonoBehaviour
         SelectItemStack(GetItemStackUIByCoordinate(new Vector2Int(
             0, selectedCoordinate.y
         )));
+    }
+
+    private void TransferStack()
+    {
+        if (otherInventory == null)
+        {
+            // if there is no other inventory don't allow item stack transfers
+            return;
+        }
+
+        Inventory selectedInventory = playerInventory;
+        Inventory transferToInventory = otherInventory;
+        if (isOtherInventorySelected)
+        {
+            selectedInventory = otherInventory;
+            transferToInventory = playerInventory;
+        }
+
+        if (selectedItemStackUI.GetItemStack() != null)
+        {
+            Vector2Int selectedPosition = GetCoordinateByItemStackUI(selectedItemStackUI);
+            selectedInventory.TransferItem(selectedItemStackUI.GetItemStack(), transferToInventory);
+            UpdateInventoryGrid();
+            StartCoroutine(SelectPositionNextFrame(selectedPosition));
+        }
+    }
+
+    private IEnumerator SelectPositionNextFrame(Vector2Int position)
+    {
+        yield return new WaitForEndOfFrame();
+        SelectItemStack(GetItemStackUIByCoordinate(position));
     }
 
     private IEnumerator ScrollInventory(Vector3 initialLocalPosition, Vector3 targetLocalPosition, float duration)

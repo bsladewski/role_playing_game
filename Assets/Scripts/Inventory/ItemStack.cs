@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// Represents a stack of items.
 /// </summary>
-public class ItemStack
+public class ItemStack // : IEquatable<ItemStack>
 {
     private Item item;
 

@@ -77,7 +77,7 @@ public class Inventory : MonoBehaviour
     /// <param name="other">The inventory to transfer the item stack to.</param>
     public void TransferItem(ItemStack itemStack, Inventory other)
     {
-        if (!Contains(itemStack))
+        if (!itemStacks.Contains(itemStack))
         {
             return;
         }
@@ -111,16 +111,6 @@ public class Inventory : MonoBehaviour
     public int GetRemainingCapacity()
     {
         return maxSlots - itemStacks.Count;
-    }
-
-    /// <summary>
-    /// Gets whether the inventory contains the specified item stack.
-    /// </summary>
-    /// <param name="itemStack">The item stack to look for.</param>
-    /// <returns>Whether the inventory contains the specified item stack.</returns>
-    public bool Contains(ItemStack itemStack)
-    {
-        return itemStacks.Contains(itemStack);
     }
 
     private void Prune()
