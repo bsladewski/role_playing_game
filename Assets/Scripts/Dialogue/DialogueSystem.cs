@@ -17,22 +17,22 @@ public class DialogueSystem : MonoBehaviour
     /// <summary>
     /// Fired whenever dialogue between two or more actors starts.
     /// </summary>
-    public event EventHandler<List<Actor>> OnDialogueStarted;
+    public event Action<List<Actor>> OnDialogueStarted;
 
     /// <summary>
     /// Fired whenever dialogue between two or more actors ends.
     /// </summary>
-    public event EventHandler<List<Actor>> OnDialogueEnded;
+    public event Action<List<Actor>> OnDialogueEnded;
 
     /// <summary>
     /// Fired whenever a dialogue exchange occurs.
     /// </summary>
-    public event EventHandler<DialogueExchange> OnDialogueExchange;
+    public event Action<DialogueExchange> OnDialogueExchange;
 
     /// <summary>
     /// Fired whenever a dialogue one-shot occurs.
     /// </summary>
-    public event EventHandler<DialogueExchange> OnDialogueOneShot;
+    public event Action<DialogueExchange> OnDialogueOneShot;
 
     [SerializeField]
     private PlayerInput playerInput;
@@ -71,14 +71,14 @@ public class DialogueSystem : MonoBehaviour
         dialogueParser = new DialogueParser(dialogueText);
         if (dialogueParser.IsOneShot())
         {
-            OnDialogueOneShot?.Invoke(gameObject, dialogueParser.Next());
+            OnDialogueOneShot?.Invoke(dialogueParser.Next());
             return;
         }
 
         isDialogueActive = true;
         this.actors = actors;
-        OnDialogueStarted?.Invoke(gameObject, this.actors);
-        OnDialogueExchange?.Invoke(gameObject, dialogueParser.Next());
+        OnDialogueStarted?.Invoke(this.actors);
+        OnDialogueExchange?.Invoke(dialogueParser.Next());
     }
 
     /// <summary>
@@ -88,7 +88,7 @@ public class DialogueSystem : MonoBehaviour
     {
         if (isDialogueActive)
         {
-            OnDialogueEnded?.Invoke(gameObject, actors);
+            OnDialogueEnded?.Invoke(actors);
             isDialogueActive = false;
             actors = null;
             dialogueParser = null;
@@ -125,6 +125,6 @@ public class DialogueSystem : MonoBehaviour
             return;
         }
 
-        OnDialogueExchange?.Invoke(gameObject, dialogueParser.Next());
+        OnDialogueExchange?.Invoke(dialogueParser.Next());
     }
 }

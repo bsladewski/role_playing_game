@@ -12,7 +12,7 @@ public class PlayerInteraction : MonoBehaviour
     /// <summary>
     /// Fired whenever the selected interaction changes.
     /// </summary>
-    public static event EventHandler<Interaction> OnAnySelectedInteractionChanged;
+    public static event Action<Interaction> OnAnySelectedInteractionChanged;
 
     [SerializeField]
     private Player player;
@@ -68,7 +68,7 @@ public class PlayerInteraction : MonoBehaviour
             {
                 InteractionUI.Instance.Hide();
                 selectedInteraction = null;
-                OnAnySelectedInteractionChanged?.Invoke(gameObject, null);
+                OnAnySelectedInteractionChanged?.Invoke(null);
             }
             return;
         }
@@ -139,7 +139,7 @@ public class PlayerInteraction : MonoBehaviour
         {
             // if the selected action has changed update the selected interaction
             selectedInteraction = nextSelectionInteraction;
-            OnAnySelectedInteractionChanged?.Invoke(gameObject, selectedInteraction);
+            OnAnySelectedInteractionChanged?.Invoke(selectedInteraction);
             dirty = true;
         }
 

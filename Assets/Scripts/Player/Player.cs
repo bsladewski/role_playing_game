@@ -11,22 +11,22 @@ public class Player : Actor
     /// <summary>
     /// Fired whenever a player object spawns.
     /// </summary>
-    public static event EventHandler<Player> OnAnyPlayerSpawned;
+    public static event Action<Player> OnAnyPlayerSpawned;
 
     /// <summary>
     /// Fired whenever a player object is destroyed.
     /// </summary>
-    public static event EventHandler<Player> OnAnyPlayerDestroyed;
+    public static event Action<Player> OnAnyPlayerDestroyed;
 
     /// <summary>
     /// Fired whenever a player enters a building.
     /// </summary>
-    public static event EventHandler<Building> OnAnyBuildingEntered;
+    public static event Action<Building> OnAnyBuildingEntered;
 
     /// <summary>
     /// Fired whenever a player exits a building.
     /// </summary>
-    public static event EventHandler<Building> OnAnyBuildingExited;
+    public static event Action<Building> OnAnyBuildingExited;
 
     [HeaderAttribute("Player")]
     [SerializeField]
@@ -62,7 +62,7 @@ public class Player : Actor
 
     private void Start()
     {
-        OnAnyPlayerSpawned?.Invoke(gameObject, this);
+        OnAnyPlayerSpawned?.Invoke(this);
         DialogueSystem.Instance.OnDialogueStarted += DialogueSystem_OnDialogueStarted;
         DialogueSystem.Instance.OnDialogueEnded += DialogueSystem_OnDialogueEnded;
         DialogueSystem.Instance.OnDialogueExchange += DialogueSystem_OnDialogueExchange;
@@ -90,22 +90,22 @@ public class Player : Actor
             if (next != currentBuilding)
             {
                 currentBuilding = next;
-                OnAnyBuildingEntered?.Invoke(gameObject, currentBuilding);
+                OnAnyBuildingEntered?.Invoke(currentBuilding);
             }
         }
         else if (currentBuilding != null)
         {
-            OnAnyBuildingExited?.Invoke(gameObject, currentBuilding);
+            OnAnyBuildingExited?.Invoke(currentBuilding);
             currentBuilding = null;
         }
     }
 
     private void OnDestroy()
     {
-        OnAnyPlayerDestroyed?.Invoke(gameObject, this);
+        OnAnyPlayerDestroyed?.Invoke(this);
     }
 
-    private void DialogueSystem_OnDialogueStarted(object sender, List<Actor> actors)
+    private void DialogueSystem_OnDialogueStarted(List<Actor> actors)
     {
         if (actors.Contains(this))
         {
@@ -121,7 +121,7 @@ public class Player : Actor
         }
     }
 
-    private void DialogueSystem_OnDialogueEnded(object sender, List<Actor> actors)
+    private void DialogueSystem_OnDialogueEnded(List<Actor> actors)
     {
         if (actors.Contains(this))
         {
@@ -129,7 +129,7 @@ public class Player : Actor
         }
     }
 
-    private void DialogueSystem_OnDialogueExchange(object sender, DialogueExchange exchange)
+    private void DialogueSystem_OnDialogueExchange(DialogueExchange exchange)
     {
         if (exchange.actorID == GetActorID())
         {

@@ -40,7 +40,7 @@ public class ActorBusy : MonoBehaviour
         InventoryUI.Instance.OnInventoryClosed += InventoryUI_OnInventoryClosed;
     }
 
-    private void DialogueSystem_OnDialogueStarted(object sender, List<Actor> actors)
+    private void DialogueSystem_OnDialogueStarted(List<Actor> actors)
     {
         if (actors.Contains(actor))
         {
@@ -48,7 +48,7 @@ public class ActorBusy : MonoBehaviour
         }
     }
 
-    private void DialogueSystem_OnDialogueEnded(object sender, List<Actor> actors)
+    private void DialogueSystem_OnDialogueEnded(List<Actor> actors)
     {
         if (actors.Contains(actor))
         {
@@ -56,7 +56,7 @@ public class ActorBusy : MonoBehaviour
         }
     }
 
-    private void InventoryUI_OnInventoryOpened(object sender, EventArgs e)
+    private void InventoryUI_OnInventoryOpened()
     {
         if (actor is Player)
         {
@@ -64,7 +64,7 @@ public class ActorBusy : MonoBehaviour
         }
     }
 
-    private void InventoryUI_OnInventoryClosed(object sender, EventArgs e)
+    private void InventoryUI_OnInventoryClosed()
     {
         if (actor is Player)
         {

@@ -14,12 +14,12 @@ public class OverheadCameraController : MonoBehaviour
         Player.OnAnyPlayerDestroyed += Player_OnAnyPlayerDestroyed;
     }
 
-    private void Player_OnAnyPlayerSpawned(object sender, Player player)
+    private void Player_OnAnyPlayerSpawned(Player player)
     {
         this.player = player.gameObject;
     }
 
-    private void Player_OnAnyPlayerDestroyed(object sender, Player player)
+    private void Player_OnAnyPlayerDestroyed(Player player)
     {
         this.player = null;
     }

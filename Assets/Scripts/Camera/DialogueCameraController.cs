@@ -20,7 +20,7 @@ public class DialogueCameraController : MonoBehaviour
         DialogueSystem.Instance.OnDialogueExchange += DialogueSystem_OnDialogueExchange;
     }
 
-    private void DialogueSystem_OnDialogueStarted(object sender, List<Actor> actors)
+    private void DialogueSystem_OnDialogueStarted(List<Actor> actors)
     {
         Vector3 midPoint = Vector3.zero;
         Vector3 min = Vector3.zero;
@@ -48,12 +48,12 @@ public class DialogueCameraController : MonoBehaviour
         virtualCamera.SetActive(true);
     }
 
-    private void DialogueSystem_OnDialogueEnded(object sender, List<Actor> actors)
+    private void DialogueSystem_OnDialogueEnded(List<Actor> actors)
     {
         virtualCamera.SetActive(false);
     }
 
-    private void DialogueSystem_OnDialogueExchange(object sender, DialogueExchange exchange)
+    private void DialogueSystem_OnDialogueExchange(DialogueExchange exchange)
     {
         Actor actor = DialogueSystem.Instance.GetActor(exchange.actorID);
         lookAtPosition.SetTargetPosition(actor.transform.position);

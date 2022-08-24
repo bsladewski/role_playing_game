@@ -26,19 +26,19 @@ public class DialogueUI : MonoBehaviour
         DialogueSystem.Instance.OnDialogueExchange += DialogueSystem_OnDialogueExchange;
     }
 
-    private void DialogueSystem_OnDialogueStarted(object sender, List<Actor> actors)
+    private void DialogueSystem_OnDialogueStarted(List<Actor> actors)
     {
         dialogueText.text = "";
         panels.SetActive(true);
     }
 
-    private void DialogueSystem_OnDialogueEnded(object sender, List<Actor> actors)
+    private void DialogueSystem_OnDialogueEnded(List<Actor> actors)
     {
         panels.SetActive(false);
         dialogueText.text = "";
     }
 
-    private void DialogueSystem_OnDialogueExchange(object sender, DialogueExchange exchange)
+    private void DialogueSystem_OnDialogueExchange(DialogueExchange exchange)
     {
         Actor actor = DialogueSystem.Instance.GetActor(exchange.actorID);
         string text = "";

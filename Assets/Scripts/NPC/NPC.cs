@@ -28,7 +28,7 @@ public class NPC : Actor
         DialogueSystem.Instance.OnDialogueOneShot += DialogueSystem_OnDialogueOneShot;
     }
 
-    private void DialogueSystem_OnDialogueStarted(object sender, List<Actor> actors)
+    private void DialogueSystem_OnDialogueStarted(List<Actor> actors)
     {
         if (actors.Contains(this))
         {
@@ -44,7 +44,7 @@ public class NPC : Actor
         }
     }
 
-    private void DialogueSystem_OnDialogueEnded(object sender, List<Actor> actors)
+    private void DialogueSystem_OnDialogueEnded(List<Actor> actors)
     {
         if (actors.Contains(this))
         {
@@ -52,7 +52,7 @@ public class NPC : Actor
         }
     }
 
-    private void DialogueSystem_OnDialogueExchange(object sender, DialogueExchange exchange)
+    private void DialogueSystem_OnDialogueExchange(DialogueExchange exchange)
     {
         if (exchange.actorID == GetActorID())
         {
@@ -66,7 +66,7 @@ public class NPC : Actor
         }
     }
 
-    private void DialogueSystem_OnDialogueOneShot(object sender, DialogueExchange exchange)
+    private void DialogueSystem_OnDialogueOneShot(DialogueExchange exchange)
     {
         if (exchange.actorID != GetActorID())
         {

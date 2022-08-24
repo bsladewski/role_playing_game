@@ -26,7 +26,7 @@ public class Chest : MonoBehaviour
         inventory.AddItem(ItemStackFactory.Instance.CreateItemStack(2, 2));
     }
 
-    private void Interaction_OnInteractionPerformed(object sender, Player player)
+    private void Interaction_OnInteractionPerformed(Player player)
     {
         ActorBusy playerActorBusy = player.GetComponent<ActorBusy>();
         if (!playerActorBusy.GetIsBusy())

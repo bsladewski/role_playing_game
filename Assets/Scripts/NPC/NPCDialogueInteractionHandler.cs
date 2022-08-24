@@ -20,7 +20,7 @@ public class NPCDialogueInteractionHandler : MonoBehaviour
         interaction.OnInteractionPerformed += Interaction_OnInteractionPerformed;
     }
 
-    private void Interaction_OnInteractionPerformed(object sender, Player player)
+    private void Interaction_OnInteractionPerformed(Player player)
     {
         DialogueSystem.Instance.StartDialogue(
             new List<Actor>() { npc, player },

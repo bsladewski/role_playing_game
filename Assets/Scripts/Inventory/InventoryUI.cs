@@ -23,12 +23,12 @@ public class InventoryUI : MonoBehaviour
     /// <summary>
     /// Fired whenever the inventory is opened.
     /// </summary>
-    public event EventHandler OnInventoryOpened;
+    public event Action OnInventoryOpened;
 
     /// <summary>
     /// Fired whenever the inventory is closed.
     /// </summary>
-    public event EventHandler OnInventoryClosed;
+    public event Action OnInventoryClosed;
 
     [SerializeField]
     private GameObject inventoryUIPanel;
@@ -162,7 +162,7 @@ public class InventoryUI : MonoBehaviour
         otherInventoryGridLayoutGroup.GetComponent<RectTransform>().localPosition = Vector2.zero;
         inventoryUIPanel.SetActive(true);
         isOpen = true;
-        OnInventoryOpened?.Invoke(gameObject, EventArgs.Empty);
+        OnInventoryOpened?.Invoke();
     }
 
     /// <summary>
@@ -197,7 +197,7 @@ public class InventoryUI : MonoBehaviour
         isOtherInventorySelected = false;
         inventoryUIPanel.SetActive(false);
         isOpen = false;
-        OnInventoryClosed?.Invoke(gameObject, EventArgs.Empty);
+        OnInventoryClosed?.Invoke();
     }
 
     private void ClearInventoryGrid()

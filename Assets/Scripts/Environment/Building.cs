@@ -14,7 +14,7 @@ public class Building : MonoBehaviour
         Player.OnAnyBuildingExited += Player_OnAnyBuildingExited;
     }
 
-    private void Player_OnAnyBuildingEntered(object sender, Building building)
+    private void Player_OnAnyBuildingEntered(Building building)
     {
         if (building != this)
         {
@@ -27,7 +27,7 @@ public class Building : MonoBehaviour
         }
     }
 
-    private void Player_OnAnyBuildingExited(object sender, Building building)
+    private void Player_OnAnyBuildingExited(Building building)
     {
         if (building != this)
         {
