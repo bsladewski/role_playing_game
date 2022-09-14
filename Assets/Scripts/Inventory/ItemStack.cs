@@ -100,13 +100,14 @@ public class ItemStack
     }
 
     /// <summary>
-    /// Transfers items from this stack to another stack.
+    /// Transfers a number of items from this stack to another stack.
     /// </summary>
     /// <param name="other">The stack to transfer to.</param>
-    public void Transfer(ItemStack other)
+    /// <param name="amount">The number of items to transfer.</param>
+    public void Transfer(ItemStack other, int amount)
     {
         int remainingCapacity = other.GetRemainingCapacity();
-        int amountToTransfer = Mathf.Min(stackSize, remainingCapacity);
+        int amountToTransfer = Mathf.Min(stackSize, remainingCapacity, amount);
         if (amountToTransfer <= 0)
         {
             return;
@@ -114,5 +115,13 @@ public class ItemStack
 
         stackSize -= amountToTransfer;
         other.stackSize += amountToTransfer;
+    }
+
+    /// <summary>
+    /// Sets the number of items in this stack.
+    /// </summary>
+    public void SetStackSize(int amount)
+    {
+        stackSize = Mathf.Min(GetMaxStackSize(), amount);
     }
 }

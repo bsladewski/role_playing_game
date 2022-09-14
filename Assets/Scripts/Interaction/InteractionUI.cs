@@ -38,7 +38,7 @@ public class InteractionUI : MonoBehaviour
     /// <param name="multipleInteractions">Whether there are multiple nearby interactions.</param>
     public void Show(string interactionLabel, bool multipleInteractions)
     {
-        interactText.text = $"[E] {interactionLabel}";
+        interactText.text = $"[E] {interactionLabel}"; // TODO: cross-platform control hints
         if (multipleInteractions)
         {
             interactText.alignment = TextAlignmentOptions.Right;

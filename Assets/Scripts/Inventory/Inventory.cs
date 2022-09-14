@@ -7,7 +7,7 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     [SerializeField]
-    private string inventoryTitle = "Container";
+    private string title = "Container";
 
     [SerializeField]
     private int maxSlots = 25;
@@ -23,9 +23,9 @@ public class Inventory : MonoBehaviour
     /// Gets a display name for this inventory.
     /// </summary>
     /// <returns>A display name for this inventory.</returns>
-    public string GetInventoryTitle()
+    public string GetTitle()
     {
-        return inventoryTitle;
+        return title;
     }
 
     /// <summary>
@@ -45,7 +45,8 @@ public class Inventory : MonoBehaviour
     /// because the inventory became full.
     /// </summary>
     /// <param name="itemStack">The stack of items to add to the inventory.</param>
-    public void AddItem(ItemStack itemStack)
+    /// <param name="amount">The number of items to add to the inventory.</param>
+    public void AddItem(ItemStack itemStack, int amount)
     {
         foreach (ItemStack other in itemStacks)
         {
@@ -56,14 +57,14 @@ public class Inventory : MonoBehaviour
 
             if (itemStack.GetItem() == other.GetItem())
             {
-                itemStack.Transfer(other);
+                itemStack.Transfer(other, amount);
             }
         }
 
         if (itemStack.GetStackSize() > 0 && itemStacks.Count < maxSlots)
         {
             ItemStack newItemStack = new ItemStack(itemStack.GetItem(), 0);
-            itemStack.Transfer(newItemStack);
+            itemStack.Transfer(newItemStack, amount);
             itemStacks.Add(newItemStack);
         }
 
@@ -71,18 +72,38 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
-    /// Transfers an item stack from this inventory to another inventory.
+    /// Adds an item stack to the inventory.
+    /// </summary>
+    /// <param name="itemStack">The stack of items to add to the inventory.</param>
+    public void AddItem(ItemStack itemStack)
+    {
+        AddItem(itemStack, itemStack.GetStackSize());
+    }
+
+    /// <summary>
+    /// Removes an item stack from this inventory.
+    /// </summary>
+    /// <param name="itemStack">The item stack to remove.</param>
+    public void RemoveItemStack(ItemStack itemStack)
+    {
+        itemStack.SetStackSize(0);
+        Prune();
+    }
+
+    /// <summary>
+    /// Transfers a number of items from this inventory to another inventory.
     /// </summary>
     /// <param name="itemStack">The item stack to transfer.</param>
-    /// <param name="other">The inventory to transfer the item stack to.</param>
-    public void TransferItem(ItemStack itemStack, Inventory other)
+    /// <param name="to">The inventory to transfer items to.</param>
+    /// <param name="amount">The number of items to transfer.</param>
+    public void TransferItem(ItemStack itemStack, Inventory to, int amount)
     {
         if (!itemStacks.Contains(itemStack))
         {
             return;
         }
 
-        other.AddItem(itemStack);
+        to.AddItem(itemStack, amount);
         Prune();
     }
 

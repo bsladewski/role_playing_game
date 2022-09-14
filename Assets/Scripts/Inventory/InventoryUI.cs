@@ -74,8 +74,21 @@ public class InventoryUI : MonoBehaviour
     [SerializeField]
     private GridLayoutGroup otherInventoryGridLayoutGroup;
 
-    private int inventoryGridWidth = TWO_COLUMN_GRID_WIDTH;
+    [HeaderAttribute("Inventory Controls")]
+    [SerializeField]
+    private Transform inventoryControlPanelTransform;
 
+    [SerializeField]
+    private TextMeshProUGUI inventoryControlTextPrefab;
+
+    [HeaderAttribute("Dialogs")]
+    [SerializeField]
+    private TransferDialog transferDialog;
+
+    [SerializeField]
+    private ConfirmationDialog confirmationDialog;
+
+    private int inventoryGridWidth = TWO_COLUMN_GRID_WIDTH;
     private Inventory playerInventory, otherInventory;
 
     private InputAction closeAction;
@@ -84,6 +97,8 @@ public class InventoryUI : MonoBehaviour
     private InputAction leftAction;
     private InputAction rightAction;
     private InputAction transferAction;
+    private InputAction transferXAction;
+    private InputAction dropAction;
 
     private List<ItemStackUI> playerItemStackUIs;
     private List<ItemStackUI> otherItemStackUIs;
@@ -91,7 +106,10 @@ public class InventoryUI : MonoBehaviour
     private ItemStackUI selectedItemStackUI;
 
     private bool isOpen;
+    private bool isDialogOpen;
     private bool isOtherInventorySelected;
+
+    private bool allowInput { get { return isOpen && !isDialogOpen; } }
 
     private void Awake()
     {
@@ -113,14 +131,18 @@ public class InventoryUI : MonoBehaviour
         leftAction = playerInput.actions["Left"];
         rightAction = playerInput.actions["Right"];
         transferAction = playerInput.actions["Transfer"];
+        transferXAction = playerInput.actions["Transfer X"];
 
         // bind player input action handlers
-        closeAction.started += _ => { if (isOpen) { CloseInventory(); } };
-        upAction.started += _ => { if (isOpen) { SelectUp(); } };
-        downAction.started += _ => { if (isOpen) { SelectDown(); } };
-        leftAction.started += _ => { if (isOpen) { SelectLeft(); } };
-        rightAction.started += _ => { if (isOpen) { SelectRight(); } };
-        transferAction.started += _ => { if (isOpen) { TransferStack(); } };
+        upAction.started += _ => { if (allowInput) { NavigateInventoryUp(); } };
+        downAction.started += _ => { if (allowInput) { NavigateInventoryDown(); } };
+        leftAction.started += _ => { if (allowInput) { NavigateInventoryLeft(); } };
+        rightAction.started += _ => { if (allowInput) { NavigateInventoryRight(); } };
+
+        closeAction.started += _ => { if (allowInput) { CloseInventory(); } };
+        transferAction.started += _ => { if (allowInput) { TransferStack(); } };
+        transferXAction.started += _ => { if (allowInput) { TransferStackX(); } };
+        dropAction.started += _ => { if (allowInput) { DropStack(); } };
     }
 
     /// <summary>
@@ -173,31 +195,18 @@ public class InventoryUI : MonoBehaviour
     {
         ClearInventoryGrid();
         playerItemStackUIs = PopulateInventoryGrid(playerInventoryGridLayoutGroup, playerInventory);
-        string title = playerInventory.GetInventoryTitle();
+        string title = playerInventory.GetTitle();
         int count = playerInventory.GetItemStackCount();
         int max = playerInventory.GetMaxCapacity();
         playerInventoryTitle.text = $"{title} ({count}/{max})";
         if (otherInventory != null)
         {
-            title = otherInventory.GetInventoryTitle();
+            title = otherInventory.GetTitle();
             count = otherInventory.GetItemStackCount();
             max = otherInventory.GetMaxCapacity();
             otherItemStackUIs = PopulateInventoryGrid(otherInventoryGridLayoutGroup, otherInventory);
             otherInventoryTitle.text = $"{title} ({count}/{max})";
         }
-    }
-
-    /// <summary>
-    /// Cleans up the inventory grids and closes the inventory UI.
-    /// </summary>
-    public void CloseInventory()
-    {
-        ClearInventoryGrid();
-        ResetScollView();
-        isOtherInventorySelected = false;
-        inventoryUIPanel.SetActive(false);
-        isOpen = false;
-        OnInventoryClosed?.Invoke();
     }
 
     private void ClearInventoryGrid()
@@ -322,6 +331,45 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
+    private void AddInventoryControl(string control, string text)
+    {
+        TextMeshProUGUI closeText = Instantiate<TextMeshProUGUI>(inventoryControlTextPrefab);
+        closeText.text = $"[{control}] {text}";
+        closeText.transform.SetParent(inventoryControlPanelTransform);
+    }
+
+    private void SetInventoryControlsText()
+    {
+        foreach (TextMeshProUGUI controlText in inventoryControlPanelTransform.GetComponentsInChildren<TextMeshProUGUI>())
+        {
+            Destroy(controlText.gameObject);
+        }
+
+        // always show the control for closing the inventory
+        AddInventoryControl("Esc", "Close"); // TODO: cross-platform control hints
+
+        bool isItemStackSelected = selectedItemStackUI.GetItemStack() != null;
+        bool isTransferPossible = isItemStackSelected && otherInventory != null;
+
+        if (isTransferPossible && selectedItemStackUI.GetItemStack().GetStackSize() > 1)
+        {
+            // if a stack containing multiple items is selected show the control for a partial transfer
+            AddInventoryControl("Z", "Transfer X"); // TODO: cross-platform control hints
+        }
+
+        if (isTransferPossible)
+        {
+            // if an item stack is selected show the control for transferring the entire item stack
+            AddInventoryControl("X", "Transfer"); // TODO: cross-platform control hints
+        }
+
+        if (isItemStackSelected && !isOtherInventorySelected)
+        {
+            // if an item stack in the player inventory is selected show the control for dropping the item stack
+            AddInventoryControl("C", "Drop"); // TODO: cross-platform control hints
+        }
+    }
+
     private void SelectItemStack(ItemStackUI itemStackUI, bool isInitializing = false)
     {
         if (selectedItemStackUI != null)
@@ -342,6 +390,9 @@ public class InventoryUI : MonoBehaviour
 
         // update the selected item details text
         SetSelectedItemText();
+
+        // update inventory controls
+        SetInventoryControlsText();
     }
 
     private Vector2Int IndexToCoordinate(int index)
@@ -406,7 +457,7 @@ public class InventoryUI : MonoBehaviour
         return Vector2Int.zero;
     }
 
-    private void SelectUp()
+    private void NavigateInventoryUp()
     {
         // get the coordinates for the selected item stack UI element
         Vector2Int selectedCoordinate = GetCoordinateByItemStackUI(selectedItemStackUI);
@@ -440,7 +491,7 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    private void SelectDown()
+    private void NavigateInventoryDown()
     {
         // get the coordinates for the selected item stack UI element
         Vector2Int selectedCoordinate = GetCoordinateByItemStackUI(selectedItemStackUI);
@@ -468,7 +519,7 @@ public class InventoryUI : MonoBehaviour
         )));
     }
 
-    private void SelectLeft()
+    private void NavigateInventoryLeft()
     {
         // get the coordinates for the selected item stack UI element
         Vector2Int selectedCoordinate = GetCoordinateByItemStackUI(selectedItemStackUI);
@@ -520,7 +571,7 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    private void SelectRight()
+    private void NavigateInventoryRight()
     {
         // get the coordinates for the selected item stack UI element
         Vector2Int selectedCoordinate = GetCoordinateByItemStackUI(selectedItemStackUI);
@@ -571,21 +622,102 @@ public class InventoryUI : MonoBehaviour
             return;
         }
 
-        Inventory selectedInventory = playerInventory;
-        Inventory transferToInventory = otherInventory;
+        Inventory selected = playerInventory;
+        Inventory to = otherInventory;
         if (isOtherInventorySelected)
         {
-            selectedInventory = otherInventory;
-            transferToInventory = playerInventory;
+            selected = otherInventory;
+            to = playerInventory;
         }
 
-        if (selectedItemStackUI.GetItemStack() != null)
+        if (selectedItemStackUI.GetItemStack() == null)
         {
-            Vector2Int selectedPosition = GetCoordinateByItemStackUI(selectedItemStackUI);
-            selectedInventory.TransferItem(selectedItemStackUI.GetItemStack(), transferToInventory);
-            UpdateInventoryGrid();
-            StartCoroutine(SelectPositionNextFrame(selectedPosition));
+            return;
         }
+
+        Vector2Int selectedPosition = GetCoordinateByItemStackUI(selectedItemStackUI);
+        ItemStack itemStack = selectedItemStackUI.GetItemStack();
+        selected.TransferItem(itemStack, to, itemStack.GetStackSize());
+        UpdateInventoryGrid();
+        StartCoroutine(SelectPositionNextFrame(selectedPosition));
+    }
+
+    private void TransferStackX()
+    {
+        if (otherInventory == null)
+        {
+            // if there is no other inventory don't allow item stack transfers
+            return;
+        }
+
+        Inventory selected = playerInventory;
+        Inventory to = otherInventory;
+        if (isOtherInventorySelected)
+        {
+            selected = otherInventory;
+            to = playerInventory;
+        }
+
+        if (selectedItemStackUI.GetItemStack() == null)
+        {
+            return;
+        }
+
+        Vector2Int selectedPosition = GetCoordinateByItemStackUI(selectedItemStackUI);
+        ItemStack selectedItemStack = selectedItemStackUI.GetItemStack();
+        transferDialog.Initialize(selected, to, selectedItemStack);
+        transferDialog.gameObject.SetActive(true);
+        isDialogOpen = true;
+        transferDialog.OnTransferSelected += TransferDialog_OnTransferSelected;
+        transferDialog.OnTransferCancelled += TransferDialog_OnTransferCancelled;
+    }
+
+    private void DropStack()
+    {
+        Inventory selected = playerInventory;
+        if (isOtherInventorySelected)
+        {
+            selected = otherInventory;
+        }
+
+        if (selectedItemStackUI.GetItemStack() == null)
+        {
+            return;
+        }
+
+        Vector2Int selectedPosition = GetCoordinateByItemStackUI(selectedItemStackUI);
+        ItemStack selectedItemStack = selectedItemStackUI.GetItemStack();
+        string itemName = selectedItemStack.GetItemName();
+        int stackSize = selectedItemStack.GetStackSize();
+        confirmationDialog.Initialize($"Drop {itemName} ({stackSize})?", () =>
+        {
+            selected.RemoveItemStack(selectedItemStack);
+        });
+        confirmationDialog.gameObject.SetActive(true);
+        isDialogOpen = true;
+        confirmationDialog.OnConfirmationComplete += ConfirmationDialog_OnConfirmationComplete;
+    }
+
+    private void CloseInventory()
+    {
+        ClearInventoryGrid();
+        ResetScollView();
+        isOtherInventorySelected = false;
+        inventoryUIPanel.SetActive(false);
+        isOpen = false;
+        OnInventoryClosed?.Invoke();
+    }
+
+    private void CloseTransferDialog()
+    {
+        transferDialog.gameObject.SetActive(false);
+        isDialogOpen = false;
+    }
+
+    private void CloseConfirmationDialog()
+    {
+        confirmationDialog.gameObject.SetActive(false);
+        isDialogOpen = false;
     }
 
     private IEnumerator SelectPositionNextFrame(Vector2Int position)
@@ -612,5 +744,25 @@ public class InventoryUI : MonoBehaviour
 
         playerContentPanel.localPosition = targetLocalPosition;
         otherContentPanel.localPosition = targetLocalPosition;
+    }
+
+    private void TransferDialog_OnTransferSelected(
+        Inventory from,
+        Inventory to,
+        ItemStack itemStack,
+        int amount)
+    {
+        from.TransferItem(itemStack, to, amount);
+        CloseTransferDialog();
+    }
+
+    private void TransferDialog_OnTransferCancelled()
+    {
+        CloseTransferDialog();
+    }
+
+    private void ConfirmationDialog_OnConfirmationComplete()
+    {
+        CloseConfirmationDialog();
     }
 }
